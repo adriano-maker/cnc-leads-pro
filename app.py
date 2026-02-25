@@ -84,18 +84,18 @@ if not edited_df.equals(df):
     st.session_state.leads = edited_df
     st.success("Alterações salvas!")
 
-# Botão para enviar email para TODOS os contatos (com Outlook)
+# Botão para enviar email para TODOS os contatos (configurado para Gmail)
 st.subheader("Enviar Email para Todos os Contatos da Tabela")
 
-sender_email = st.text_input("Seu email Outlook", value="futurynk.oficial@outlook.com")
-sender_password = st.text_input("Senha da conta Outlook", type="password")
+sender_email = st.text_input("Seu email Gmail", value="futurynk.oficial@gmail.com")
+sender_password = st.text_input("Senha de app Gmail (16 caracteres)", type="password")
 
 texto_email = st.text_area("Texto do email (use {nome} para personalizar)", 
-    value="Olá {nome},\n\nEspero que esteja bem.\n\nSou Adriano, especialista em usinagem de precisão com torno CNC. Produzo peças como:\n- eixos, pinos e hastes\n- buchas, rolamentos e mancais\n- flanges, adaptadores e conexões\n- engrenagens, polias e coroas\n- peças em aço, alumínio, bronze, borracha técnica e plásticos de engenharia\n- componentes para moldes, matrizes, autopeças, hidráulica e máquinas industriais\n\nSe você está com demanda de peças usinadas, sobrecarga na produção ou busca um parceiro confiável para terceirizar, posso oferecer solução sob medida com qualidade e prazo.\n\nGostaria de receber uma proposta rápida e personalizada?\n\nPodemos conversar agora ou agendar uma ligação?\n\nAguardo seu retorno!\n\nAtenciosamente,\nAdriano da Silva\nEspecialista em Usinagem CNC\n(47) 98479-3983\nfuturynk.oficial@outlook.com\nJoinville, Santa Catarina")
+    value="Olá {nome},\n\nEspero que esteja bem.\n\nSou Adriano, especialista em usinagem de precisão com torno CNC. Produzo peças como:\n- eixos, pinos e hastes\n- buchas, rolamentos e mancais\n- flanges, adaptadores e conexões\n- engrenagens, polias e coroas\n- peças em aço, alumínio, bronze, borracha técnica e plásticos de engenharia\n- componentes para moldes, matrizes, autopeças, hidráulica e máquinas industriais\n\nSe você está com demanda de peças usinadas, sobrecarga na produção ou busca um parceiro confiável para terceirizar, posso oferecer solução sob medida com qualidade e prazo.\n\nGostaria de receber uma proposta rápida e personalizada?\n\nPodemos conversar agora ou agendar uma ligação?\n\nAguardo seu retorno!\n\nAtenciosamente,\nAdriano da Silva\nEspecialista em Usinagem CNC\n(47) 98479-3983\nfuturynk.oficial@gmail.com\nJoinville, Santa Catarina")
 
 if st.button("📧 Enviar Email para TODOS os contatos"):
     if not sender_email or not sender_password:
-        st.warning("Preencha seu email e senha.")
+        st.warning("Preencha seu email e senha de app.")
     elif not texto_email:
         st.warning("Preencha o texto do email.")
     else:
@@ -117,7 +117,7 @@ if st.button("📧 Enviar Email para TODOS os contatos"):
                 msg['From'] = sender_email
                 msg['To'] = email_dest
 
-                server = smtplib.SMTP("smtp-mail.outlook.com", 587)
+                server = smtplib.SMTP("smtp.gmail.com", 587)
                 server.starttls()
                 server.login(sender_email, sender_password)
                 server.sendmail(sender_email, email_dest, msg.as_string())
@@ -129,7 +129,7 @@ if st.button("📧 Enviar Email para TODOS os contatos"):
                 status.error(f"Falha para {nome}: {str(e)}")
 
             progress.progress((i + 1) / len(df))
-            time.sleep(5)
+            time.sleep(5)  # delay anti-bloqueio
 
         st.success(f"Envio concluído! {total_enviados} emails enviados com sucesso.")
 
